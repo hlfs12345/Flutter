@@ -15,7 +15,7 @@ class AppColors {
     Color(0xFF438883),
   ];
 
-  static const List<Color> InativeGradientColor = [
+  static const List<Color> inativeGradientColor = [
     Color(0xFFB3B6B6),
     Color(0xFF838383),
   ];
