@@ -3,6 +3,8 @@ import 'package:financy_app/common/utils/input_validators.dart';
 import 'package:financy_app/common/widgets/action_text_button.dart';
 import 'package:financy_app/common/widgets/custom_text_form_field.dart';
 import 'package:financy_app/common/widgets/primary_button.dart';
+import 'package:financy_app/features/sign_up/sign_up_controller.dart';
+import 'package:financy_app/features/sign_up/sign_up_state.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -14,13 +16,49 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  final _controller = SignUpController();
+
+  @override
+  void initState() {
+    _controller.addListener(() {
+      if (_controller.state is SignUpLoadingState) {
+        showDialog(
+          context: context,
+          builder: (context) =>
+              const Center(child: CircularProgressIndicator()),
+        );
+      }
+      if (_controller.state is SignUpSucessState) {
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                const Scaffold(body: Center(child: Text('Nova tela'))),
+          ),
+        );
+      }
+      if (_controller.state is SignUpErrorState) {
+        Navigator.pop(context);
+        showDialog(
+          context: context,
+          builder: (context) => const SizedBox(
+            height: 150,
+            child: Text('Erro ao logar, tente novamente'),
+          ),
+        );
+      }
+    });
+    super.initState();
+  }
 
   @override
   void dispose() {
-    passwordController.dispose();
-    confirmPasswordController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -53,7 +91,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   validator: InputValidators.email,
                 ),
                 CustomTextFormField(
-                  controller: passwordController,
+                  controller: _passwordController,
                   labelText: 'choose YourPassword',
                   hintText: '********',
                   isPassword: true,
@@ -63,14 +101,14 @@ class _SignUpPageState extends State<SignUpPage> {
                   validator: InputValidators.password,
                 ),
                 CustomTextFormField(
-                  controller: confirmPasswordController,
+                  controller: _confirmPasswordController,
                   labelText: 'Confirm Your Password',
                   hintText: '********',
                   isPassword: true,
                   textInputAction: TextInputAction.done,
                   validator: (value) => InputValidators.confirmPassword(
                     value,
-                    passwordController.text,
+                    _passwordController.text,
                   ),
                 ),
               ],
@@ -86,7 +124,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     _formKey.currentState != null &&
                     _formKey.currentState!.validate();
                 if (valid) {
-                  print('Continuar login');
+                  _controller.doSignUp();
                 } else {
                   print('Erro ao logar');
                 }
