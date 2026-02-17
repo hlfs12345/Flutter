@@ -29,6 +29,11 @@ class AppTextStyles {
 
   static const TextStyle inputLabelText = TextStyle(
     fontSize: 14.0,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Inter',
+  );
+  static const TextStyle inputHintText = TextStyle(
+    fontSize: 12.0,
     fontWeight: FontWeight.w400,
     fontFamily: 'Inter',
   );
