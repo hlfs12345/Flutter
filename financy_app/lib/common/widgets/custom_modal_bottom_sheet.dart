@@ -3,7 +3,11 @@ import 'package:financy_app/common/constants/app_text_styles.dart';
 import 'package:financy_app/common/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
-Future<void> customModalBottomSheet(BuildContext context) {
+Future<void> customModalBottomSheet(
+  BuildContext context, {
+  required String content,
+  required String buttonText,
+}) {
   return showModalBottomSheet<void>(
     context: context,
     shape: RoundedRectangleBorder(
@@ -28,7 +32,7 @@ Future<void> customModalBottomSheet(BuildContext context) {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(
-                'Ops, something wrong.',
+                content,
                 style: AppTextStyles.mediumText20.copyWith(
                   color: AppColors.finalGradientColor,
                 ),
@@ -39,7 +43,7 @@ Future<void> customModalBottomSheet(BuildContext context) {
                   horizontal: 32.0,
                 ),
                 child: PrimaryButton(
-                  text: 'Try again',
+                  text: buttonText,
                   onPressed: () => Navigator.pop(context),
                 ),
               ),

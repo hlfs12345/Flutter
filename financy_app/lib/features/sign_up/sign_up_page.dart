@@ -7,6 +7,7 @@ import 'package:financy_app/common/widgets/custom_text_form_field.dart';
 import 'package:financy_app/common/widgets/primary_button.dart';
 import 'package:financy_app/features/sign_up/sign_up_controller.dart';
 import 'package:financy_app/features/sign_up/sign_up_state.dart';
+import 'package:financy_app/services/mock_auth_service.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -20,7 +21,9 @@ class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  final _controller = SignUpController();
+  final _controller = SignUpController(MockAuthService());
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
 
   @override
   void initState() {
@@ -43,8 +46,13 @@ class _SignUpPageState extends State<SignUpPage> {
         );
       }
       if (_controller.state is SignUpErrorState) {
+        final error = _controller.state as SignUpErrorState;
         Navigator.pop(context);
-        customModalBottomSheet(context);
+        customModalBottomSheet(
+          context,
+          content: error.message,
+          buttonText: 'Try again',
+        );
       }
     });
     super.initState();
@@ -55,6 +63,8 @@ class _SignUpPageState extends State<SignUpPage> {
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     _controller.dispose();
+    _nameController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -74,6 +84,7 @@ class _SignUpPageState extends State<SignUpPage> {
             child: Column(
               children: [
                 CustomTextFormField(
+                  controller: _nameController,
                   labelText: 'Your Name',
                   hintText: 'Full Name',
                   textCapitalization: TextCapitalization.words,
@@ -81,6 +92,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   validator: InputValidators.name,
                 ),
                 CustomTextFormField(
+                  controller: _emailController,
                   labelText: 'Your E-mail',
                   hintText: 'email@email.com',
                   textInputAction: TextInputAction.next,
@@ -120,7 +132,11 @@ class _SignUpPageState extends State<SignUpPage> {
                     _formKey.currentState != null &&
                     _formKey.currentState!.validate();
                 if (valid) {
-                  _controller.doSignUp();
+                  _controller.signUp(
+                    name: _nameController.text,
+                    email: _emailController.text,
+                    password: _passwordController.text,
+                  );
                 } else {
                   print('Erro ao logar');
                 }
