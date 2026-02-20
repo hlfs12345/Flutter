@@ -8,7 +8,7 @@ import 'package:financy_app/common/widgets/custom_text_form_field.dart';
 import 'package:financy_app/common/widgets/primary_button.dart';
 import 'package:financy_app/features/sign_up/sign_up_controller.dart';
 import 'package:financy_app/features/sign_up/sign_up_state.dart';
-import 'package:financy_app/services/mock_auth_service.dart';
+import 'package:financy_app/locator.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -22,9 +22,9 @@ class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  final _controller = SignUpController(MockAuthService());
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _controller = locator.get<SignUpController>();
 
   @override
   void initState() {
