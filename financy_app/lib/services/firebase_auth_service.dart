@@ -10,15 +10,12 @@ class FirebaseAuthService implements AuthService {
     required String password,
   }) async {
     try {
-      final result = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      if (result.user != null) {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      if (_auth.currentUser != null) {
         return UserModel(
-          id: result.user!.uid,
-          name: result.user!.displayName,
-          email: result.user!.email,
+          id: _auth.currentUser!.uid,
+          name: _auth.currentUser!.displayName,
+          email: _auth.currentUser!.email,
         );
       } else {
         throw Exception();
@@ -37,16 +34,16 @@ class FirebaseAuthService implements AuthService {
     required String password,
   }) async {
     try {
-      final result = await _auth.createUserWithEmailAndPassword(
+      await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      if (result.user != null) {
-        await result.user!.updateDisplayName(name);
+      if (_auth.currentUser != null) {
+        await _auth.currentUser!.updateDisplayName(name);
         return UserModel(
-          id: result.user!.uid,
-          name: result.user!.displayName,
-          email: result.user!.email,
+          id: _auth.currentUser!.uid,
+          name: _auth.currentUser!.displayName,
+          email: _auth.currentUser!.email,
         );
       } else {
         throw Exception();

@@ -1,9 +1,10 @@
-import 'dart:async';
-
 import 'package:financy_app/common/constants/app_colors.dart';
 import 'package:financy_app/common/constants/app_text_styles.dart';
 import 'package:financy_app/common/constants/routes.dart';
 import 'package:financy_app/common/widgets/custom_circular_progress_indicator.dart';
+import 'package:financy_app/features/splash/splash_controller.dart';
+import 'package:financy_app/features/splash/splash_state.dart';
+import 'package:financy_app/locator.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
@@ -14,19 +15,35 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  final _splashController = locator.get<SplashController>();
+
   @override
   void initState() {
     super.initState();
-    init();
+    _splashController.isUserLogged();
+    _splashController.addListener(() {
+      if (_splashController.state is SplashStateSuccess) {
+        print("navega para home");
+      } else {
+        Navigator.pushReplacementNamed(context, NamedRoute.initial);
+      }
+    });
+    // init();
   }
 
-  Timer init() {
-    return Timer(Duration(seconds: 2), navigateToOnboarding);
+  @override
+  void dispose() {
+    _splashController.dispose();
+    super.dispose();
   }
 
-  void navigateToOnboarding() {
-    Navigator.pushReplacementNamed(context, NamedRoute.initial);
-  }
+  // Timer init() {
+  //   return Timer(Duration(seconds: 2), navigateToOnboarding);
+  // }
+
+  // void navigateToOnboarding() {
+  //   Navigator.pushReplacementNamed(context, NamedRoute.initial);
+  // }
 
   @override
   Widget build(BuildContext context) {
