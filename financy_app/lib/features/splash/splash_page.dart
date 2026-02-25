@@ -23,7 +23,7 @@ class _SplashPageState extends State<SplashPage> {
     _splashController.isUserLogged();
     _splashController.addListener(() {
       if (_splashController.state is SplashStateSuccess) {
-        print("navega para home");
+        Navigator.pushReplacementNamed(context, NamedRoute.home);
       } else {
         Navigator.pushReplacementNamed(context, NamedRoute.initial);
       }

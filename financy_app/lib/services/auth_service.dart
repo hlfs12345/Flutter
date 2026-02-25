@@ -8,4 +8,6 @@ abstract class AuthService {
   });
 
   Future<UserModel> signIn({required String email, required String password});
+
+  Future<void> signOut();
 }
