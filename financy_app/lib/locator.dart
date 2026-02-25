@@ -20,6 +20,6 @@ void setupDependencies() {
   );
 
   locator.registerFactory<SignUpController>(
-    () => SignUpController(locator.get<AuthService>()),
+    () => SignUpController(locator.get<AuthService>(), const SecureStorage()),
   );
 }
